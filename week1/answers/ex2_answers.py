@@ -147,6 +147,6 @@ And Rasa is more deterministic but more complicated.
 
 MOST_SURPRISING = """
 I'm honestly surprised that the agent didn't hallucinate anything when it didn't have any fitting venues.
-Also I didn't see any major problems with the model reasoning.
+Also I didn't see any major problems with the model reasoning when checking for venues in general.
 So it looks like agent are actually fit for doing such tasks.
 """
