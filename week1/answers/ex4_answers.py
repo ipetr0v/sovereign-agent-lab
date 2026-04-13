@@ -7,30 +7,39 @@ Fill this in after running exercise4_mcp_client.py.
 # ── Basic results ──────────────────────────────────────────────────────────
 
 # Tool names as shown in "Discovered N tools" output.
-TOOLS_DISCOVERED = []
+TOOLS_DISCOVERED = [
+    "search_venues",
+    "get_venue_details"
+]
 
-QUERY_1_VENUE_NAME    = "FILL_ME_IN"
-QUERY_1_VENUE_ADDRESS = "FILL_ME_IN"
-QUERY_2_FINAL_ANSWER  = "FILL_ME_IN"
+QUERY_1_VENUE_NAME    = "The Haymarket Vaults"
+QUERY_1_VENUE_ADDRESS = "1 Dalry Road, Edinburgh"
+QUERY_2_FINAL_ANSWER  = "It seems there are no Edinburgh venues currently available that can accommodate 300 guests with vegan options. Would you like to:\n1. Try reducing the minimum capacity requirement?\n2. Check for venues with vegan options that have lower capacity?\n3. Search for venues without the vegan requirement?\n\nLet me know how you'd like to adjust the criteria!"
 
 # ── The experiment ─────────────────────────────────────────────────────────
 # Required: modify venue_server.py, rerun, revert.
 
-EX4_EXPERIMENT_DONE = None   # True or False
+EX4_EXPERIMENT_DONE = True
 
 # What changed, and which files did or didn't need updating? Min 30 words.
 EX4_EXPERIMENT_RESULT = """
-FILL ME IN
+Changed The Albanach's status to "full" in mcp_venue_server.py and reran the client.
+Query 1 returned only The Haymarket Vaults instead of both venues.
+The client code (exercise4_mcp_client.py) didn't need any changes at all.
+Only the server data changed, and the client picked it up automatically via MCP discovery.
 """
 
 # ── MCP vs hardcoded ───────────────────────────────────────────────────────
 
-LINES_OF_TOOL_CODE_EX2 = 0   # count in exercise2_langgraph.py
-LINES_OF_TOOL_CODE_EX4 = 0   # count in exercise4_mcp_client.py
+LINES_OF_TOOL_CODE_EX2 = 226   # count in exercise2_langgraph.py
+LINES_OF_TOOL_CODE_EX4 = 50    # count in exercise4_mcp_client.py
 
 # What does MCP buy you beyond "the tools are in a separate file"? Min 30 words.
 MCP_VALUE_PROPOSITION = """
-FILL ME IN
+MCP gives you runtime discovery.
+The client doesn't know what tools exist until it connects.
+You can add, remove or change tools on the server without touching the client at all.
+Also multiple different clients (LangGraph, Rasa and anything that speaks MCP) can share the same server.
 """
 
 # ── PyNanoClaw architecture — SPECULATION QUESTION ─────────────────────────
@@ -70,11 +79,12 @@ FILL ME IN
 #     ambiguous task.
 
 WEEK_5_ARCHITECTURE = """
-- FILL ME IN
-- FILL ME IN
-- FILL ME IN
-- FILL ME IN
-- FILL ME IN
+- The Planner sits at the top and breaks down Rod's big WhatsApp request into small steps like "find venue" or "make flyer".
+- The Executor is just the ReAct loop we built. It takes those small steps and actually runs the tools until it gets an answer.
+- The Shared MCP Server is the server we just tested. Both the loop and the Rasa agent connect to it to share tools.
+- The Handoff Bridge is the glue between them. If the loop needs to talk to a human, it hands off to Rasa. If Rasa needs research, it hands back.
+- The Rasa CALM Agent handles the phone call with the pub manager using strict rules so it doesn't mess up.
+- Persistent Memory lets the agent remember what it did before so it doesn't ask the same questions twice.
 """
 
 # ── The guiding question ───────────────────────────────────────────────────
@@ -82,5 +92,9 @@ WEEK_5_ARCHITECTURE = """
 # Must reference specific things you observed in your runs. Min 60 words.
 
 GUIDING_QUESTION_ANSWER = """
-FILL ME IN
+I'd use LangGraph for the research and Rasa for the call.
+In Exercise 2, LangGraph figured out on its own which venues to check and skip.
+In Exercise 3, Rasa just collected three specific answers and followed business rules.
+Swapping them is a bad idea. LangGraph might just improvise and accept a bad deposit because it "thinks" it is okay.
+And you can't write a Rasa flow for every possible search query you might make.
 """
